@@ -47,3 +47,6 @@ jobs:
     - ${{ each resource in parameters.tfImports }}:
       - bash: echo "${{ variables['Import_${{resource.key}}'] }}"
         displayName: Print Import_${{resource.key}} variable
+      
+    - bash: printenv
+      displayName: printenv
