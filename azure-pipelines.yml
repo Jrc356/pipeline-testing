@@ -35,11 +35,14 @@ jobs:
 
     - ${{ each resource in parameters.tfImports }}:
       - bash: |
+          import=false
           if [[ "$state" != *"${{ resource.value.address }}"* ]]; then
             echo "${{ resource.value.address }} needs to be imported"
             import=true
           fi
           echo "##vso[task.setvariable variable=Import_${{resource.key}};]$import"
+        displayName: Check State for ${{ resource.key }}
     
     - ${{ each resource in parameters.tfImports }}:
       - bash: echo "${{ variables['Import_${{resource.key}}'] }}"
+        displayName: Print Import_${{resource.key}} variable
