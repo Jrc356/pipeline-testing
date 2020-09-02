@@ -45,7 +45,7 @@ jobs:
         displayName: Check State for ${{ resource.key }}
     
     - ${{ each resource in parameters.tfImports }}:
-      - bash: echo $( variables.${{ resource.key }} )
+      - bash: echo $( ${{ resource.key }} )
         displayName: Print ${{resource.key}} variable
       
     - bash: printenv
