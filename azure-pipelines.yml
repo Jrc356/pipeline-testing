@@ -27,6 +27,6 @@ jobs:
       steps:
           - checkout: none
           - bash: |
-            ${{ each resource in parameters.tfImports }}:
-              echo "${{resource.address}}"
-              echo "${{resource.id}}"
+              ${{ each resource in parameters.tfImports }}:
+                echo "${{resource.address}}"
+                echo "${{resource.id}}"
