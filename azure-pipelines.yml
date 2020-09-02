@@ -26,4 +26,4 @@ jobs:
     - job: TEST
       steps:
           - checkout: none
-          - bash: echo ${{ parameters.tfImports }}
+          - bash: echo ${{ parameters.tfImports }}[@]
