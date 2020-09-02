@@ -23,11 +23,12 @@ parameters:
           id: /subscriptions/1111111-1111-1111-1111-111111111111/resourceGroups/invreporting-prod-eastus
 
 jobs:
-    - job: TEST
-      steps:
-          - checkout: none
-          - ${{ each resource in parameters.tfImports }}:
-            - bash: |
-                echo "${{ format('{0}', resource) }}"
-                echo "${{ resource.key }}"
-                echo "${{ resource.value }}"
+- job: TEST
+  steps:
+    - checkout: none
+    - ${{ each resource in parameters.tfImports }}:
+      - bash: echo $address; echo $id
+        env:
+          address: ${{ resource.key }}
+          id: ${{ resource.value }}
+          
