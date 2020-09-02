@@ -1,32 +1,17 @@
 trigger: none
 pr: none
 
-parameters:
-  # Import terraform objects
-  # object should be in a list of key:value pairs in the form:
-  # <arbitrary_resoureName>:
-  #   address: <resourceAddress>
-  #   id: <resourceId>
-  #
-  # For example, to import the resource group invreporting-prod-eastus
-  # which is at resourceAddress "module.rg.azurerm_resource_group.rg"
-  # and has the resourceId "/subscriptions/1111111-1111-1111-1111-111111111111/resourceGroups/invreporting-prod-eastus"
-  # the object would look like this:
-  # - resourceGroup:
-  #     address: module.rg.azurerm_resource_group.rg
-  #     id: /subscriptions/1111111-1111-1111-1111-111111111111/resourceGroups/invreporting-prod-eastus
-  - name: tfImports
-    type: object
-    default:
-      - resourceGroup:
-          address: module.rg.azurerm_resource_group.rg
-          id: /subscriptions/1111111-1111-1111-1111-111111111111/resourceGroups/invreporting-prod-eastus
+variables:
+  tfImports:
+    - resourceGroup:
+        address: module.rg.azurerm_resource_group.rg
+        id: /subscriptions/1111111-1111-1111-1111-111111111111/resourceGroups/invreporting-prod-eastus
 
 jobs:
 - job: TEST
   steps:
     - checkout: none
-    - ${{ each resource in parameters.tfImports }}:
+    - ${{ each resource in variables['tfImports'] }}:
       - bash: echo $address; echo $id
         env:
           address: ${{ resource.key }}
