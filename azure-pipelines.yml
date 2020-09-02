@@ -25,11 +25,11 @@ parameters:
 jobs:
     - job: TEST
       steps:
+          - checkout: none
           - task: AzureCLI@2
             name: StateCheck
             displayName: Check State
             inputs:
-                workingDirectory: ${{ parameters.workingDir }}
                 azureSubscription: $(Subscription)
                 scriptType: bash
                 scriptLocation: inlineScript
