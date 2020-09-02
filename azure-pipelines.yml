@@ -32,11 +32,12 @@ jobs:
   steps:
     - checkout: none
     - bash: echo "##vso[task.setvariable variable=STATE;]module.rg.azurerm_resource_group.rg"
+      displayName: Set dummy state
 
     - ${{ each resource in parameters.tfImports }}:
       - bash: |
           import=false
-          if [[ "$state" != *"${{ resource.value.address }}"* ]]; then
+          if [[ "$(STATE)" != *"${{ resource.value.address }}"* ]]; then
             echo "${{ resource.value.address }} needs to be imported"
             import=true
           fi
