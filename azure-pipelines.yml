@@ -46,7 +46,7 @@ jobs:
     
     - ${{ each resource in parameters.tfImports }}:
       - bash: echo good
-        condition: eq(variables[${{ resource.key }}], 'true')
+        condition: eq(variables['${{ resource.key }}'], 'true')
         displayName: Print ${{resource.key}} variable
       
     - bash: printenv
