@@ -41,12 +41,12 @@ jobs:
             echo "${{ resource.value.address }} needs to be imported"
             import=true
           fi
-          echo "##vso[task.setvariable variable=Import_${{resource.key}};]$import"
+          echo "##vso[task.setvariable variable=${{resource.key}};]$import"
         displayName: Check State for ${{ resource.key }}
     
     - ${{ each resource in parameters.tfImports }}:
-      - bash: echo "${{ variables['Import_${{resource.key}}'] }}"
-        displayName: Print Import_${{resource.key}} variable
+      - bash: echo "$( ${{ resource.key }} )"
+        displayName: Print ${{resource.key}} variable
       
     - bash: printenv
       displayName: printenv
