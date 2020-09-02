@@ -28,6 +28,6 @@ jobs:
           - checkout: none
           - ${{ each resource in parameters.tfImports }}:
             - bash: |
-                echo "${{ resource }}"
+                echo "${{ join(',', resource)}}"
                 echo "${{ resource.key }}"
                 echo "${{ resource.value }}"
