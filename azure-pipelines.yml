@@ -18,9 +18,9 @@ parameters:
   - name: tfImports
     type: object
     default:
-     - resourceGroup:
-        address: module.rg.azurerm_resource_group.rg
-        id: /subscriptions/1111111-1111-1111-1111-111111111111/resourceGroups/invreporting-prod-eastus
+      - resourceGroup:
+          address: module.rg.azurerm_resource_group.rg
+          id: /subscriptions/1111111-1111-1111-1111-111111111111/resourceGroups/invreporting-prod-eastus
 
 jobs:
     - job: TEST
@@ -28,5 +28,5 @@ jobs:
           - checkout: none
           - ${{ each resource in parameters.tfImports }}:
             - bash: |
-                echo "${{ resource["address"] }}"
-                echo "${{ resource["id"] }}"
+                echo "${{ resource.address }}"
+                echo "${{ resource.id }}"
