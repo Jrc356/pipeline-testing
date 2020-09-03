@@ -1,0 +1,46 @@
+Tali Forth is shipped with a built-in assembler that uses the Simpler Assembler
+Format (SAN). See the Appendix for an introduction to SAN.
+
+NOTE: The code was originally part of a stand-alone 65c02 assembler in Forth
+named tasm65c02. See https://github.com/scotws/tasm65c02 for details. Tasm65c02
+is in the public domain.
+
+==== Adding assembler code at the command line
+
+Because Tali Forth is a Subroutine Threaded (STC) Forth, inserting assembler
+instructions is easy. In fact, the only real problem is accessing the assembler
+wordlist, which is normally not in the search tree because of its length. This,
+then, is one way to add assembler code:
+
+----
+        assembler-wordlist >order
+        here            \ Remember where we are
+        1 lda.#         \ LDA #1 in Simpler Assembler Notation (SAN)
+        push-a          \ Pseudo-instruction, pushes A on the Forth data stack
+        rts             \ End subroutine. Don't use BRK!
+        execute         \ Run our code using value from HERE
+        .s              \ Will show 1 as TOS
+        previous
+----
+
+The first line is required to give the user access to the list of assembler
+mnemonics. They are not in the default wordlist path because of their sheer
+number: 
+
+----
+        adc.# adc.x adc.y adc.z adc.zi adc.ziy adc.zx adc.zxi and. and.# and.x
+        and.y and.z and.zi and.ziy and.zx and.zxi asl asl.a asl.x asl.z asl.zx
+        bcc bcs beq bit bit.# bit.x bit.z bit.zx bmi bne bpl bra brk bvc bvs clc
+        cld cli clv cmp cmp.# cmp.x cmp.y cmp.z cmp.zi cmp.ziy cmp.zx cmp.zxi
+        cpx cpx.# cpx.z cpy cpy.# cpy.z dec dec.a dec.x dec.z dec.zx dex dey eor
+        eor.# eor.x eor.y eor.z eor.zi eor.ziy eor.zx eor.zxi inc inc.a inc.x
+        inc.z inc.zx inx iny jmp jmp.i jmp.xi jsr lda lda.# lda.x lda.y lda.z
+        lda.zi lda.ziy lda.zx lda.zxi ldx ldx.# ldx.y ldx.z ldx.zy ldy ldy.#
+        ldy.x ldy.z ldy.zx lsr lsr.a lsr.x lsr.z lsr.zx nop ora ora.# ora.x
+        ora.y ora.z ora.zi ora.ziy ora.zx ora.zxi pha php phx phy pla plp plx
+        ply rol rol.a rol.x rol.z rol.zx ror ror.a ror.x ror.z ror.zx rti rts
+        sbc sbc.# sbc.x sbc.y sbc.z sbc.zi sbc.ziy sbc.zx sbc.zxi sec sed sei
+        sta sta.x sta.y sta.z sta.zi sta.ziy sta.zx sta.zxi stx stx.z stx.zy sty
+        sty.z sty.zx stz stz.x stz.z stz.zx tax tay trb trb.z tsb tsb.z tsx txa
+        txs tya
+----
