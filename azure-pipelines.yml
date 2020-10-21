@@ -10,7 +10,7 @@ stages:
       name: A1S
 - stage: B
   dependsOn: A
-  condition: dependencies.A.outputs['A1.A1S.TEST']
+  condition: eq(dependencies.A.outputs['A1.A1S.TEST'], true)
   jobs:
     - job: B1
       steps:
