@@ -1,55 +1,18 @@
 trigger: none
 pr: none
 
-parameters:
-  # Import terraform objects
-  # object should be in an object of key:value pairs in the form:
-  # <arbitrary_resoureName>:
-  #   address: <resourceAddress>
-  #   id: <resourceId>
-  #
-  # For example, to import the resource group invreporting-prod-eastus
-  # which is at resourceAddress "module.rg.azurerm_resource_group.rg"
-  # and has the resourceId "/subscriptions/1111111-1111-1111-1111-111111111111/resourceGroups/invreporting-prod-eastus"
-  # the object would look like this:
-  #
-  # resourceGroup:
-  #   address: module.rg.azurerm_resource_group.rg
-  #   id: /subscriptions/1111111-1111-1111-1111-111111111111/resourceGroups/invreporting-prod-eastus
-  
-  - name: tfImports
-    type: object
-    default:
-      resourceGroup:
-        address: module.rg.azurerm_resource_group.rg
-        id: /subscriptions/1111111-1111-1111-1111-111111111111/resourceGroups/invreporting-prod-eastus
-      resourceGroup2:
-        address: module.rg2.azurerm_resource_group.rg
-        id: /subscriptions/1111111-1111-1111-1111-111111111111/resourceGroups/invreporting-prod-eastus
-
-jobs:
-- job: TEST
-  steps:
-    - checkout: none
-    - bash: echo "##vso[task.setvariable variable=STATE;]module.rg.azurerm_resource_group.rg"
-      displayName: Set dummy state
-
-    - ${{ each resource in parameters.tfImports }}:
-      - bash: |
-          import=false
-          if [[ "$(STATE)" != *"${{ resource.value.address }}"* ]]; then
-            echo "${{ resource.value.address }} needs to be imported"
-            import=true
-          fi
-          echo "##vso[task.setvariable variable=${{resource.key}};]$import"
-        displayName: Check State for ${{ resource.key }}
-    
-    - ${{ each resource in parameters.tfImports }}:
-      - bash: echo good
-        condition: eq(variables['${{ resource.key }}'], 'true')
-        displayName: Print ${{resource.key}} variable
-      
-    - bash: printenv
-      workingDirectory: 
-      displayName: printenv
+stages:
+- stage: A
+  jobs:
+  - job: A1
+    steps:
+    - bash: echo "##vso[task.setvariable variable=TEST;isOutput=true]true"
+      name: A1S
+- stage: B
+  dependsOn: A
+  condition: dependencies.A.outputs['A1.A1S.TEST']
+  jobs:
+    - job: B1
+      steps:
+      - bash: echo "Hello World"
 
