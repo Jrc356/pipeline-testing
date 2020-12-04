@@ -11,7 +11,7 @@ stages:
 - stage: B
   dependsOn: A
   variables: 
-    VAR: $[ dependencies.A.outputs['A1.A1S.TEST'] ]
+    VAR: $[ stageDependencies.A.A1.outputs['A1S.TEST'] ]
   jobs:
     - job: B1
       steps:
