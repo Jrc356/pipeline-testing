@@ -10,9 +10,10 @@ stages:
       name: A1S
 - stage: B
   dependsOn: A
-  condition: eq(dependencies.A.outputs['A1.A1S.TEST'], true)
+  variables: 
+    VAR: $[ dependencies.A.outputs['A1.A1S.TEST'] ]
   jobs:
     - job: B1
       steps:
-      - bash: echo "Hello World"
+      - bash: echo $(VAR)
 
