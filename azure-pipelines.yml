@@ -9,6 +9,7 @@ parameters:
         NonProd: 1
         Prod: 99
       - Step: 2
+        DependsOn: 1
         NonProd: 50
         Prod: 50
 
@@ -24,7 +25,7 @@ stages:
     dependsOn:
       - Init
       - ${{ if ne(split.Step, 1)}}:
-        - A${{ split.Step - 1 }}
+        - A${{ split.DependsOn }}
     jobs:
     - job: A${{split.Step}}
       steps:
