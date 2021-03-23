@@ -1,19 +1,23 @@
 trigger: none
 pr: none
 
+variables:
+  SPLITS:
+  - Step: 1
+    NonProd: 1
+    Prod: 99
+  - Step: 2
+    NonProd: 50
+    Prod: 50
+
 stages:
-- stage: A
-  jobs:
-  - job: A1
-    steps:
-    - bash: echo "##vso[task.setvariable variable=TEST;isOutput=true]false"
-      name: A1S
-- stage: B
-  dependsOn: A
-  variables: 
-    VAR: $[ stageDependencies.A.A1.outputs['A1S.TEST'] ]
-  jobs:
-    - job: B1
+- ${{ each split in variables.SPLITS }}:
+  - stage: A${{split.Step}}
+    jobs:
+    - job: A${{split.Step}}
       steps:
-      - bash: echo $(VAR)
+      - script: |
+          echo ${{ split.Step }}
+          echo ${{ split.Prod }}
+          echo ${{ split.NonProd }}
 
