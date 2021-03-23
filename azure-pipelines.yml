@@ -34,3 +34,16 @@ stages:
           echo ${{ split.Prod }}
           echo ${{ split.NonProd }}
 
+- stage: Revert
+  dependsOn: 
+    - ${ each split in parameters.SPLITS }:
+      - A${{ split.step }}
+  condition: |
+    ${{ each split in parameters.SPLITS }}:
+      eq(dependencies.A${{ split.step }}.result, 'Failed')
+
+  jobs:
+    - job: B
+      steps:
+        - script: echo done
+
