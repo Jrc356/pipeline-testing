@@ -38,9 +38,23 @@ stages:
           fi
 
 - stage: Revert
+  dependsOn:
+    - Init
+    - ${ each split in parameters.SPLITS }:
+      - TrafficShape${{ split.step }}
   condition: not(succeeded())
   jobs:
     - job: B
       steps:
         - script: echo done
 
+- stage: Finalize
+  dependsOn:
+    - Init
+    - ${ each split in parameters.SPLITS }:
+      - TrafficShape${{ split.step }}
+  condition: succeeded()
+  jobs:
+    - job: C
+      steps:
+        - script: echo done
