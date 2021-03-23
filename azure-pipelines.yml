@@ -33,15 +33,13 @@ stages:
           echo ${{ split.Step }}
           echo ${{ split.Prod }}
           echo ${{ split.NonProd }}
+          if [[ ${{split.Step}} == 2 ]]; then
+            exit 1
+          fi
 
 - stage: Revert
-  dependsOn: 
-    - ${ each split in parameters.SPLITS }:
-      - A${{ split.step }}
   condition: |
-    ${{ each split in parameters.SPLITS }}:
-      eq(dependencies.A${{ split.step }}.result, 'Failed')
-
+    in(dependencies.A${{ split[-1].step }}.result, 'Skipped', 'Failed')
   jobs:
     - job: B
       steps:
