@@ -13,8 +13,18 @@ parameters:
         Prod: 50
 
 stages:
+- stage: Init
+  jobs:
+    - job: init
+      steps:
+        - script: echo hi
+
 - ${{ each split in parameters.SPLITS }}:
   - stage: A${{split.Step}}
+    dependsOn:
+      - Init
+      - ${{ if ne(split.Step, 1)}}:
+        - A${{ split.Step - 1 }}
     jobs:
     - job: A${{split.Step}}
       steps:
