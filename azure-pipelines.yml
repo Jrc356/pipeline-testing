@@ -40,7 +40,7 @@ stages:
 - stage: Revert
   dependsOn:
     - Init
-    - ${ each split in parameters.SPLITS }:
+    ${ each split in parameters.SPLITS }:
       - TrafficShape${{ split.Step }}
   condition: not(succeeded())
   jobs:
