@@ -3,12 +3,12 @@ pr: none
 
 variables:
   SPLITS:
-  - Step: 1
-    NonProd: 1
-    Prod: 99
-  - Step: 2
-    NonProd: 50
-    Prod: 50
+    - Step: 1
+      NonProd: 1
+      Prod: 99
+    - Step: 2
+      NonProd: 50
+      Prod: 50
 
 stages:
 - ${{ each split in variables.SPLITS }}:
