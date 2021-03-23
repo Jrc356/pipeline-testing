@@ -41,7 +41,7 @@ stages:
   dependsOn:
     - Init
     - ${{ each split in parameters.SPLITS }}:
-      - TrafficShape${{ split.Step }}
+      - A${{ split.Step }}
   condition: not(succeeded())
   jobs:
     - job: B
@@ -52,7 +52,7 @@ stages:
   dependsOn:
     - Init
     - ${{ each split in parameters.SPLITS }}:
-      - TrafficShape${{ split.Step }}
+      - A${{ split.Step }}
   condition: succeeded()
   jobs:
     - job: C
