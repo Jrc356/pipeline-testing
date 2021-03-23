@@ -3,6 +3,7 @@ pr: none
 
 variables:
   SPLITS:
+    SPLITS:
     - Step: 1
       NonProd: 1
       Prod: 99
@@ -11,7 +12,7 @@ variables:
       Prod: 50
 
 stages:
-- ${{ each split in variables.SPLITS }}:
+- ${{ each split in variables.SPLITS.SPLITS }}:
   - stage: A${{split.Step}}
     jobs:
     - job: A${{split.Step}}
