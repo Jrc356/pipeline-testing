@@ -34,7 +34,7 @@ stages:
           echo ${{ split.Prod }}
           echo ${{ split.NonProd }}
           if [[ ${{split.Step}} == 2 ]]; then
-            exit 0
+            exit 1
           fi
 
 - stage: Revert
