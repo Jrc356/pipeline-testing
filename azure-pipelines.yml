@@ -1,18 +1,18 @@
 trigger: none
 pr: none
 
-variables:
-  SPLITS:
-    SPLITS:
-    - Step: 1
-      NonProd: 1
-      Prod: 99
-    - Step: 2
-      NonProd: 50
-      Prod: 50
+parameters:
+  - name: SPLITS
+    default:
+      - Step: 1
+        NonProd: 1
+        Prod: 99
+      - Step: 2
+        NonProd: 50
+        Prod: 50
 
 stages:
-- ${{ each split in variables.SPLITS.SPLITS }}:
+- ${{ each split in parameters.SPLITS }}:
   - stage: A${{split.Step}}
     jobs:
     - job: A${{split.Step}}
