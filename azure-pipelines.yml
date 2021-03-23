@@ -39,7 +39,7 @@ stages:
 
 - stage: Revert
   condition: |
-    in(dependencies.A${{ SPLITS[length(SPLITS)].step }}.result, 'Skipped', 'Failed')
+    in(dependencies.A${{ parameters.SPLITS[length(SPLITS)].step }}.result, 'Skipped', 'Failed')
   jobs:
     - job: B
       steps:
