@@ -20,10 +20,18 @@ stages:
       steps:
         - script: echo hi
 
+- stage: Deploy
+  jobs:
+  - job:
+    steps:
+      - script: exit 1
+
 - ${{ each split in parameters.SPLITS }}:
   - stage: A${{split.Step}}
     dependsOn:
       - Init
+      - ${{ if eq(split.Step, 1)}}:
+        - Deploy
       - ${{ if ne(split.Step, 1)}}:
         - A${{ split.DependsOn }}
     jobs:
