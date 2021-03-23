@@ -3,6 +3,7 @@ pr: none
 
 parameters:
   - name: SPLITS
+    type: object
     default:
       - Step: 1
         NonProd: 1
