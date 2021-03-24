@@ -28,18 +28,18 @@ stages:
         - script: echo hi
 
 - stage: ToSkip1
+  condition: eq(true, false)
   dependsOn: Build
   jobs:
     - job: Skip
-      condition: eq(true, false)
       steps:
         - script: echo hi
 
 - stage: ToSkip2
+  condition: eq(true, false)
   dependsOn: Build
   jobs:
     - job: Skip
-      condition: eq(true, false)
       steps:
         - script: echo hi
 
