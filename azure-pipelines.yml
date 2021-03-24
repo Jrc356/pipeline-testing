@@ -46,7 +46,7 @@ stages:
 - stage: Deploy
   dependsOn:
     - Init
-    - 
+    - Build
     - ToSkip1
     - ToSkip2
   condition: |
