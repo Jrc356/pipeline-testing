@@ -57,7 +57,7 @@ stages:
       in(dependencies.ToSkip2.result, 'Succeeded', 'Skipped')
     )
   jobs:
-  - job:
+  - job: Deploy
     steps:
       - script: echo hi
 
