@@ -20,11 +20,46 @@ stages:
       steps:
         - script: echo hi
 
+- stage: Build
+  dependsOn: Init
+  jobs:
+    - job: Build
+      steps:
+        - script: echo hi
+
+- stage: ToSkip1
+  dependsOn: Build
+  jobs:
+    - job: Skip
+      condition: eq(true, false)
+      steps:
+        - script: echo hi
+
+- stage: ToSkip2
+  dependsOn: Build
+  jobs:
+    - job: Skip
+      condition: eq(true, false)
+      steps:
+        - script: echo hi
+
 - stage: Deploy
+  dependsOn:
+    - Init
+    - 
+    - ToSkip1
+    - ToSkip2
+  condition: |
+    and
+    (
+      eq(dependencies.Build.result, 'Succeeded'),
+      in(dependencies.ToSkip1.result, 'Succeeded', 'Skipped'),
+      in(dependencies.ToSkip2.result, 'Succeeded', 'Skipped')
+    )
   jobs:
   - job:
     steps:
-      - script: exit 1
+      - script: echo hi
 
 - ${{ each split in parameters.SPLITS }}:
   - stage: A${{split.Step}}
