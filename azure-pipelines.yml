@@ -1,103 +1,16 @@
 trigger: none
 pr: none
 
-parameters:
-  - name: SPLITS
-    type: object
-    default:
-      - Step: 1
-        NonProd: 1
-        Prod: 99
-      - Step: 2
-        DependsOn: 1
-        NonProd: 50
-        Prod: 50
-
 stages:
 - stage: Init
   jobs:
     - job: init
       steps:
-        - script: echo hi
-
-- stage: Build
-  dependsOn: Init
-  jobs:
-    - job: Build
-      steps:
-        - script: echo hi
-
-- stage: ToSkip1
-  condition: eq(true, false)
-  dependsOn: Build
-  jobs:
-    - job: Skip
-      steps:
-        - script: echo hi
-
-- stage: ToSkip2
-  condition: eq(true, false)
-  dependsOn: Build
-  jobs:
-    - job: Skip
-      steps:
-        - script: echo hi
-
-- stage: Deploy
-  dependsOn:
-    - Init
-    - Build
-    - ToSkip1
-    - ToSkip2
-  condition: |
-    and
-    (
-      eq(dependencies.Build.result, 'Succeeded'),
-      in(dependencies.ToSkip1.result, 'Succeeded', 'Skipped'),
-      in(dependencies.ToSkip2.result, 'Succeeded', 'Skipped')
-    )
-  jobs:
-  - job: Deploy
-    steps:
-      - script: echo hi
-
-- ${{ each split in parameters.SPLITS }}:
-  - stage: A${{split.Step}}
-    dependsOn:
-      - Init
-      - ${{ if eq(split.Step, 1)}}:
-        - Deploy
-      - ${{ if ne(split.Step, 1)}}:
-        - A${{ split.DependsOn }}
-    jobs:
-    - job: A${{split.Step}}
-      steps:
-      - script: |
-          echo ${{ split.Step }}
-          echo ${{ split.Prod }}
-          echo ${{ split.NonProd }}
-          if [[ ${{split.Step}} == 2 ]]; then
-            exit 1
-          fi
-
-- stage: Revert
-  dependsOn:
-    - Init
-    - ${{ each split in parameters.SPLITS }}:
-      - A${{ split.Step }}
-  condition: not(succeeded())
-  jobs:
-    - job: B
-      steps:
-        - script: echo done
-
-- stage: Finalize
-  dependsOn:
-    - Init
-    - ${{ each split in parameters.SPLITS }}:
-      - A${{ split.Step }}
-  condition: succeeded()
-  jobs:
-    - job: C
-      steps:
-        - script: echo done
+        - task: AzureCLI@2
+          displayName: Azure CLI
+          inputs:
+            azureSubscription: gopuff-dev
+            scriptType: bash
+            scriptLocation: inlineScript
+            inlineScript: |
+              az network front-door -h
