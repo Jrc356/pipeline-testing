@@ -6,12 +6,4 @@ stages:
   jobs:
     - job: init
       steps:
-        - task: AzureCLI@2
-          displayName: Azure CLI
-          inputs:
-            azureSubscription: gopuff-dev
-            scriptType: bash
-            scriptLocation: inlineScript
-            inlineScript: |
-              az config set extension.use_dynamic_install=yes_without_prompt
-              az network front-door -h
+        - script: echo ${{ 1 + 2}}
