@@ -1,10 +1,19 @@
 trigger: none
 pr: none
 
+parameters:
+  - name: INSTANCES
+    displayName: Instances to deploy to (leave alone)
+    type: object
+    default:
+      - id: "I001"
+      - id: "I002"
+
 stages:
 - stage: Init
   jobs:
     - job: init
       displayName: Test ${{ 2-1 }}
       steps:
-        - script: echo hi
+        - ${{ each instance in parameters.INSTANCES }}:
+          - script: echo ${{ format("{}", replace(instance.id, 'I', '') - 1) }}
