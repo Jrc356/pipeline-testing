@@ -11,21 +11,10 @@ parameters:
     displayName: Legacy instances to deploy to
     type: object
     default: {
-      "Instance 001": { ID: "I001" },
-      "Instance 002": { ID: "I002" },
-      "Instance 103": { ID: "I103" },
-      "Instance 004": { ID: "I004" },
-      "Instance 105": { ID: "I105" },
-      "Instance 006": { ID: "I006" },
-      "Instance 007": { ID: "I007" },
-      "Instance 108": { ID: "I108" },
-      "Instance 009": { ID: "I009" },
-      "Instance 110": { ID: "I110" },
-      "Instance 011": { ID: "I011" },
-      "Instance 012": { ID: "I012" },
-      "Instance 013": { ID: "I013" },
-      "Instance 014": { ID: "I014" },
-      "Instance 015": { ID: "I015" },
+      "Instance 001": { ID: "001" },
+      "Instance 002": { ID: "002" },
+      "Instance 103": { ID: "103" },
+      "Instance 004": { ID: "004" }
     }
 
 stages:
@@ -36,4 +25,4 @@ stages:
       matrix: ${{ parameters.LEGACY_INSTANCES }}
       maxParallel: ${{ parameters.PARALLELISM }}
     steps:
-      - script: echo ${{ replace(variables.ID, 'I', '') }}
+      - script: echo $(ID)
