@@ -2,18 +2,38 @@ trigger: none
 pr: none
 
 parameters:
-  - name: INSTANCES
-    displayName: Instances to deploy to (leave alone)
+  - name: PARALLELISM
+    displayName: Number of instances to deploy to simultaneously
+    type: number
+    default: 1
+
+  - name: LEGACY_INSTANCES
+    displayName: Legacy instances to deploy to
     type: object
-    default:
-      - id: "I001"
-      - id: "I002"
+    default: {
+      "I001": { ID: "I001" },
+      "I002": { ID: "I002" },
+      "I103": { ID: "I103" },
+      "I004": { ID: "I004" },
+      "I105": { ID: "I105" },
+      "I006": { ID: "I006" },
+      "I007": { ID: "I007" },
+      "I108": { ID: "I108" },
+      "I009": { ID: "I009" },
+      "I110": { ID: "I110" },
+      "I011": { ID: "I011" },
+      "I012": { ID: "I012" },
+      "I013": { ID: "I013" },
+      "I014": { ID: "I014" },
+      "I015": { ID: "I015" },
+    }
 
 stages:
 - stage: Init
   jobs:
-    - job: init
-      displayName: Test ${{ 2-1 }}
-      steps:
-        - ${{ each instance in parameters.INSTANCES }}:
-          - script: echo ${{ format("{}", replace(instance.id, 'I', '') - 1) }}
+  - job: Deploy
+    strategy:
+      matrix: ${{ parameters.LEGACY_INSTANCES }}
+      maxParallel: ${{ parameters.PARALLELISM }}
+    steps:
+      - script: echo ${{ replace(variables.ID, 'I', '') }}
