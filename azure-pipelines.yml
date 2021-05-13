@@ -26,3 +26,4 @@ stages:
       maxParallel: ${{ parameters.PARALLELISM }}
     steps:
       - script: echo $(ID)
+        displayName: Deploy $(ID)
